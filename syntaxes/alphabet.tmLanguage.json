@@ -1,0 +1,156 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Alphabet",
+    "scopeName": "source.alphabet",
+    "fileTypes": [
+        "abc"
+    ],
+    "patterns": [
+        {
+            "include": "#magic-header"
+        },
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#fstrings"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#type-ids"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#system"
+        },
+        {
+            "include": "#identifiers"
+        }
+    ],
+    "repository": {
+        "magic-header": {
+            "match": "^#alphabet<[a-z]+>",
+            "name": "meta.preprocessor.alphabet keyword.control.directive.alphabet"
+        },
+        "comments": {
+            "match": "#.*$",
+            "name": "comment.line.number-sign.alphabet"
+        },
+        "strings": {
+            "begin": "\"",
+            "end": "\"",
+            "name": "string.quoted.double.alphabet",
+            "patterns": [
+                {
+                    "match": "\\\\[ntr\"\\\\]",
+                    "name": "constant.character.escape.alphabet"
+                }
+            ]
+        },
+        "fstrings": {
+            "begin": "f\"",
+            "end": "\"",
+            "name": "string.quoted.double.alphabet meta.string.interpolated.alphabet",
+            "patterns": [
+                {
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "name": "meta.interpolation.alphabet",
+                    "contentName": "source.alphabet.embedded",
+                    "patterns": [
+                        {
+                            "include": "#numbers"
+                        },
+                        {
+                            "include": "#system"
+                        },
+                        {
+                            "include": "#identifiers"
+                        },
+                        {
+                            "include": "#operators"
+                        }
+                    ]
+                },
+                {
+                    "match": "\\\\[ntr\"\\\\]",
+                    "name": "constant.character.escape.alphabet"
+                }
+            ]
+        },
+        "numbers": {
+            "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+            "name": "constant.numeric.alphabet"
+        },
+        "type-ids": {
+            "match": "(?<![a-zA-Z0-9_])(?:1[1-5]?|[2-9]|15)(?![a-zA-Z0-9_])",
+            "name": "storage.type.alphabet"
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "match": "\\b(i|e|l|r|b|k|q)\\b",
+                    "name": "keyword.control.alphabet"
+                },
+                {
+                    "match": "\\b(c|j|a)\\b",
+                    "name": "keyword.declaration.alphabet"
+                },
+                {
+                    "match": "\\b(m)\\b",
+                    "name": "keyword.declaration.function.alphabet"
+                },
+                {
+                    "match": "\\b(v|p|s)\\b",
+                    "name": "storage.modifier.alphabet"
+                },
+                {
+                    "match": "\\b(n)\\b",
+                    "name": "keyword.operator.new.alphabet"
+                },
+                {
+                    "match": "\\b(t|h)\\b",
+                    "name": "keyword.control.exception.alphabet"
+                },
+                {
+                    "match": "\\b(x)\\b",
+                    "name": "keyword.control.import.alphabet"
+                }
+            ]
+        },
+        "operators": {
+            "match": "(==|!=|>=|<=|&&|\\|\\||[+\\-*/%=<>!])",
+            "name": "keyword.operator.alphabet"
+        },
+        "system": {
+            "patterns": [
+                {
+                    "match": "\\bz\\b",
+                    "name": "support.variable.alphabet"
+                },
+                {
+                    "match": "\\bz\\.(o|i|f|fw|t|sqrt|abs|pow|floor|ceil|round|sin|cos|tan|log|log10|min|max|len|type|tostr|tonum|upper|lower|trim|split|join|replace|substr|chr|ord|starts_with|ends_with|contains|reverse|append|pop_back|insert|remove|sort|range|keys|values|map|filter|reduce|thread|join_all|lock|acquire|release|dyn)\\b",
+                    "captures": {
+                        "0": {
+                            "name": "support.function.builtin.alphabet"
+                        }
+                    }
+                }
+            ]
+        },
+        "identifiers": {
+            "match": "[a-zA-Z_][a-zA-Z0-9_]*",
+            "name": "variable.other.alphabet"
+        }
+    }
+}
