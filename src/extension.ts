@@ -1,16 +1,13 @@
-import * as net from "net";
+import * as child_process from "child_process";
 import * as vscode from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
-  ServerOptions,
   RevealOutputChannelOn,
   StreamInfo,
 } from "vscode-languageclient/node";
 
 let client: LanguageClient | undefined;
-
-const LSP_PORT = 7777;
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -24,25 +21,25 @@ export async function activate(
 
   const binaryPath = config.get<string>("lsp.path", "alphabet");
 
-  const serverOptions: ServerOptions = () => {
-    return new Promise<StreamInfo>((resolve, reject) => {
-      const server = require("child_process").spawn(binaryPath, ["--lsp"], {
+  const serverOptions: () => Promise<StreamInfo> = () => {
+    return new Promise((resolve, reject) => {
+      const proc = child_process.spawn(binaryPath, ["--lsp"], {
         shell: false,
+        stdio: ["pipe", "pipe", "pipe"],
       });
 
-      server.stderr.on("data", (data: Buffer) => {
-        console.error(`Alphabet LSP stderr: ${data.toString()}`);
+      proc.on("error", (err) => {
+        reject(err);
       });
 
-      setTimeout(() => {
-        const socket = net.createConnection({ port: LSP_PORT }, () => {
-          resolve({ reader: socket, writer: socket });
-        });
+      proc.stderr.on("data", (data: Buffer) => {
+        console.error(`Alphabet LSP: ${data.toString()}`);
+      });
 
-        socket.on("error", (err) => {
-          reject(err);
-        });
-      }, 500);
+      resolve({
+        reader: proc.stdout,
+        writer: proc.stdin,
+      });
     });
   };
 
