@@ -1,26 +1,70 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as path from "path";
+import * as vscode from "vscode";
+import {
+  LanguageClient,
+  LanguageClientOptions,
+  ServerOptions,
+  TransportKind,
+  RevealOutputChannelOn,
+} from "vscode-languageclient/node";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+let client: LanguageClient | undefined;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "alphabet-language" is now active!');
+export async function activate(
+  context: vscode.ExtensionContext,
+): Promise<void> {
+  const config = vscode.workspace.getConfiguration("alphabet");
+  const lspEnabled = config.get<boolean>("lsp.enabled", true);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('alphabet-language.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from alphabet-language!');
-	});
+  if (!lspEnabled) {
+    return;
+  }
 
-	context.subscriptions.push(disposable);
+  const binaryPath = config.get<string>("lsp.path", "alphabet");
+
+  const serverOptions: ServerOptions = {
+    command: binaryPath,
+    args: ["--lsp"],
+    transport: TransportKind.stdio,
+  };
+
+  const clientOptions: LanguageClientOptions = {
+    documentSelector: [{ scheme: "file", language: "alphabet" }],
+    synchronize: {
+      fileEvents: vscode.workspace.createFileSystemWatcher("**/*.abc"),
+    },
+    outputChannelName: "Alphabet Language Server",
+    revealOutputChannelOn: RevealOutputChannelOn.Error,
+    traceOutputChannel: vscode.window.createOutputChannel("Alphabet LSP Trace"),
+  };
+
+  client = new LanguageClient(
+    "alphabet",
+    "Alphabet Language Server",
+    serverOptions,
+    clientOptions,
+  );
+
+  try {
+    await client.start();
+  } catch (err) {
+    vscode.window.showErrorMessage(
+      `Alphabet LSP failed to start. Ensure the 'alphabet' binary is on your PATH. Error: ${err}`,
+    );
+  }
+
+  context.subscriptions.push({
+    dispose: () => stopClient(),
+  });
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export async function deactivate(): Promise<void> {
+  await stopClient();
+}
+
+async function stopClient(): Promise<void> {
+  if (client) {
+    await client.stop();
+    client = undefined;
+  }
+}
