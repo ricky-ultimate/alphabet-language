@@ -28,9 +28,6 @@
         "syntax highlighting",
         "lsp"
     ],
-    "activationEvents": [
-        "onLanguage:alphabet"
-    ],
     "main": "./out/extension.js",
     "contributes": {
         "languages": [
