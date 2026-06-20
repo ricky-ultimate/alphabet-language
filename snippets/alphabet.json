@@ -1,0 +1,146 @@
+{
+    "Alphabet File Header": {
+        "prefix": "abc",
+        "body": [
+            "#alphabet<en>",
+            "$0"
+        ],
+        "description": "Alphabet file header"
+    },
+    "Print Output": {
+        "prefix": "zo",
+        "body": [
+            "z.o(${1:value})"
+        ],
+        "description": "Print to stdout"
+    },
+    "Variable Integer": {
+        "prefix": "vi",
+        "body": [
+            "5 ${1:name} = ${2:0}"
+        ],
+        "description": "Declare integer variable"
+    },
+    "Variable String": {
+        "prefix": "vs",
+        "body": [
+            "12 ${1:name} = \"${2:value}\""
+        ],
+        "description": "Declare string variable"
+    },
+    "Variable Float": {
+        "prefix": "vf",
+        "body": [
+            "6 ${1:name} = ${2:0.0}"
+        ],
+        "description": "Declare float variable"
+    },
+    "Variable List": {
+        "prefix": "vl",
+        "body": [
+            "13 ${1:name} = [${2}]"
+        ],
+        "description": "Declare list variable"
+    },
+    "Variable Map": {
+        "prefix": "vm",
+        "body": [
+            "14 ${1:name} = {${2}}"
+        ],
+        "description": "Declare map variable"
+    },
+    "If Statement": {
+        "prefix": "if",
+        "body": [
+            "i (${1:condition}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If statement"
+    },
+    "If Else Statement": {
+        "prefix": "ife",
+        "body": [
+            "i (${1:condition}) {",
+            "\t${2}",
+            "} e {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If else statement"
+    },
+    "While Loop": {
+        "prefix": "lw",
+        "body": [
+            "l (${1:condition}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "While-style loop"
+    },
+    "For Loop": {
+        "prefix": "lf",
+        "body": [
+            "l (5 ${1:i} = 0 : ${1:i} < ${2:limit} : ${1:i} = ${1:i} + 1) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "For-style loop"
+    },
+    "Class": {
+        "prefix": "class",
+        "body": [
+            "c ${1:ClassName} {",
+            "\tv m 1 ${2:method}(${3}) {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Class definition"
+    },
+    "Method": {
+        "prefix": "method",
+        "body": [
+            "v m ${1:5} ${2:name}(${3}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Public method"
+    },
+    "Try Handle": {
+        "prefix": "try",
+        "body": [
+            "t {",
+            "\t${1}",
+            "} h (12 ${2:err}) {",
+            "\tz.o(${2:err})",
+            "\t$0",
+            "}"
+        ],
+        "description": "Try/handle block"
+    },
+    "Pattern Match": {
+        "prefix": "match",
+        "body": [
+            "q (${1:value}) {",
+            "\t${2:1}: ${3}",
+            "\te: ${0}",
+            "}"
+        ],
+        "description": "Pattern match block"
+    },
+    "New Object": {
+        "prefix": "new",
+        "body": [
+            "${1:15} ${2:obj} = n ${3:ClassName}()"
+        ],
+        "description": "Instantiate a class"
+    },
+    "F-String": {
+        "prefix": "fs",
+        "body": [
+            "f\"${1:text} {${2:variable}}\""
+        ],
+        "description": "Interpolated string"
+    }
+}
