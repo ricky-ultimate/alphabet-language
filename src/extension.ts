@@ -1,12 +1,16 @@
+import * as net from "net";
 import * as vscode from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   RevealOutputChannelOn,
+  StreamInfo,
 } from "vscode-languageclient/node";
 
 let client: LanguageClient | undefined;
+
+const LSP_PORT = 7777;
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -20,9 +24,26 @@ export async function activate(
 
   const binaryPath = config.get<string>("lsp.path", "alphabet");
 
-  const serverOptions: ServerOptions = {
-    command: binaryPath,
-    args: ["--lsp"],
+  const serverOptions: ServerOptions = () => {
+    return new Promise<StreamInfo>((resolve, reject) => {
+      const server = require("child_process").spawn(binaryPath, ["--lsp"], {
+        shell: false,
+      });
+
+      server.stderr.on("data", (data: Buffer) => {
+        console.error(`Alphabet LSP stderr: ${data.toString()}`);
+      });
+
+      setTimeout(() => {
+        const socket = net.createConnection({ port: LSP_PORT }, () => {
+          resolve({ reader: socket, writer: socket });
+        });
+
+        socket.on("error", (err) => {
+          reject(err);
+        });
+      }, 500);
+    });
   };
 
   const clientOptions: LanguageClientOptions = {
