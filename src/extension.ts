@@ -1,4 +1,4 @@
-import * as child_process from "child_process";
+import * as childProcess from "child_process";
 import * as vscode from "vscode";
 import {
   LanguageClient,
@@ -23,7 +23,7 @@ export async function activate(
 
   const serverOptions: () => Promise<StreamInfo> = () => {
     return new Promise((resolve, reject) => {
-      const proc = child_process.spawn(binaryPath, ["--lsp"], {
+      const proc = childProcess.spawn(binaryPath, ["--lsp"], {
         shell: false,
         stdio: ["pipe", "pipe", "pipe"],
       });
