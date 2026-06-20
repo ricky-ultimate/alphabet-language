@@ -3,7 +3,6 @@ import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
-  TransportKind,
   RevealOutputChannelOn,
 } from "vscode-languageclient/node";
 
@@ -24,7 +23,6 @@ export async function activate(
   const serverOptions: ServerOptions = {
     command: binaryPath,
     args: ["--lsp"],
-    transport: TransportKind.stdio,
   };
 
   const clientOptions: LanguageClientOptions = {
