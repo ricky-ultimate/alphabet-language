@@ -1,40 +1,111 @@
 {
-  "name": "alphabet-language",
-  "displayName": "alphabet-language",
-  "description": "Language support for the Alphabet programming language",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.125.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "alphabet-language.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.125.0",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
-    "eslint": "^9.39.3",
-    "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
-  }
+    "name": "alphabet-language",
+    "displayName": "Alphabet Language",
+    "description": "Language support for the Alphabet programming language",
+    "version": "0.1.0",
+    "publisher": "ricky-ultimate",
+    "author": {
+        "name": "Ricky Ogigi",
+        "email": "rickyultimate.dev@gmail.com"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ricky-ultimate/alphabet-language"
+    },
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Linters"
+    ],
+    "keywords": [
+        "alphabet",
+        "abc",
+        "language",
+        "syntax highlighting",
+        "lsp"
+    ],
+    "activationEvents": [
+        "onLanguage:alphabet"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "alphabet",
+                "aliases": [
+                    "Alphabet",
+                    "alphabet"
+                ],
+                "extensions": [
+                    ".abc"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "alphabet",
+                "scopeName": "source.alphabet",
+                "path": "./syntaxes/alphabet.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "alphabet",
+                "path": "./snippets/alphabet.json"
+            }
+        ],
+        "configuration": {
+            "title": "Alphabet Language",
+            "properties": {
+                "alphabet.lsp.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable the Alphabet language server."
+                },
+                "alphabet.lsp.path": {
+                    "type": "string",
+                    "default": "alphabet",
+                    "description": "Path to the Alphabet binary used to start the LSP server."
+                },
+                "alphabet.lsp.trace": {
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "off",
+                    "description": "Trace level for LSP communication."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src",
+        "test": "vscode-test",
+        "package": "vsce package"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.85.0",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "22.x",
+        "typescript-eslint": "^8.56.1",
+        "eslint": "^9.39.3",
+        "typescript": "^5.9.3",
+        "@vscode/test-cli": "^0.0.12",
+        "@vscode/test-electron": "^2.5.2",
+        "vsce": "^2.15.0"
+    }
 }
