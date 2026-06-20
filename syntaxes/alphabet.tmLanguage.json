@@ -93,7 +93,7 @@
             "name": "constant.numeric.alphabet"
         },
         "type-ids": {
-            "match": "(?<![a-zA-Z0-9_])(?:1[1-5]?|[2-9]|15)(?![a-zA-Z0-9_])",
+            "match": "(?<![.\\d])\\b(1[1-5]|[1-8])\\b(?!\\s*[=+\\-*/%<>!])",
             "name": "storage.type.alphabet"
         },
         "keywords": {
